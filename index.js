@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name YouTube Music Lyrics
-// @namespace Lyrics
+// @name YouTube Music Lyrics V2.0 by ProComGameS
+// @namespace Better Lyrics
 // @match https://music.youtube.com/*
 // @connect https://apic-desktop.musixmatch.com/*
 // @noframes
@@ -36,7 +36,7 @@ style.innerHTML = `
     height: 100%;
     z-index: 100;
     align-items: flex-end;
-    justify-content: center;
+    justify-content: right;
     padding-bottom: 2em;
     pointer-events: none;
     bottom: var(--ytmusic-player-bar-height);
@@ -48,46 +48,58 @@ style.innerHTML = `
   .lyrics-wrapper.hidden {
     display: none;
   }
-  .lyrics-container {
-    background: rgba(6, 6, 6, .85);
-    height: 300px;
-    width: 600px;
+.lyrics-container {
+    scroll-behavior: smooth;
+    background: radial-gradient(circle, rgba(0,0,0,0.3981967787114846) 50%, rgba(0,0,0,0) 100%);
+    backdrop-filter: blur(50px);
+    height: 600px;
+    width: 400px;
     overflow: scroll;
     color: white;
     box-shadow: 0 4px 12px 4px rgba(0,0,0,.5);
-    border-radius: 5px;
+    border-radius: 15px;
     pointer-events: auto;
-  }
+    backdrop-filter: blur(100%);
+}
   .lyrics-container::-webkit-scrollbar {
     display: none;
   }
   .lyrics-wrapper.fullscreen .lyrics-container {
     font-size: min(2.8em, 4vmin);
-    background: linear-gradient(to right, #780505, #942823);
+    background: radial-gradient(circle, rgba(0,0,0,0.3981967787114846) 50%, rgba(0,0,0,0) 100%);
+  backdrop-filter: blur(50px);
     width: 100%;
-    height: 100%;
+    height: 93%;
+    margin-bottom: 4.3%;
   }
   ul.lyrics-list {
     text-align: center;
-    font-size: 2.1em;
-    line-height: 1.5;
+    font-size: 2.5em;
+    line-height: 2.5;
     padding: 1em;
     position: relative;
     font-family: 'YT Sans', sans-serif;
   }
   ul.lyrics-list li {
-    opacity: .7;
+    opacity: .3;
     list-style-type: none;
   }
   ul.lyrics-list li.other {
-    opacity: .5;
+    opacity: .4;
   }
-  ul.lyrics-list li.active {
-    opacity: 1;
-    font-size: 1.4em;
+@keyframes fadeIn {
+    100% {opacity: 1;}
+    100% {opacity: 1;}
+}
+
+ul.lyrics-list li.active {
+    animation-name: fadeIn;
+    animation-fill-mode: forwards;
+    animation-duration: 2.0s;
+    font-size: 1.0em;
     font-weight: bold;
-    margin: .4em 0;
-  }
+    margin: 0em;
+}
   .lyrics-delay {
     position: absolute;
     margin: 1em;
@@ -124,7 +136,7 @@ function fetchLyrics(track, artists) {
       onabort: reject,
       onerror: reject,
 
-      onloadend: res => {
+onloadend: res => {
         const { message: { body: { macro_calls } } } = JSON.parse(res.responseText)
 
         if ('track.subtitles.get' in macro_calls &&
@@ -252,14 +264,24 @@ function setup() {
       for (const lyric of lyrics) {
         const el = document.createElement('li'),
               text = lyric.text || (lyric === lyrics[lyrics.length - 1] ? '(end)' : '...')
-        
+
         if (text === '')
           el.classList.add('other')
 
         el.setAttribute('data-time', lyric.time.total)
         el.setAttribute('data-text', lyric.text)
 
-        el.innerText = text
+        const a = document.createElement('a');
+        a.href = '#';
+        a.innerText = text
+        a.style.textDecoration = 'none';
+        a.style.color = 'inherit';
+        el.appendChild(a);
+
+        a. addEventListener('click', function(event) {
+          event.preventDefault();
+          moveLyric(lyric.time.total);
+        });
 
         lyric.element = el
         lyricsEl.appendChild(el)
@@ -270,6 +292,17 @@ function setup() {
     } catch (err) {
       setError(err)
     }
+  }
+
+  function moveLyric(time) {
+    const myDiv = document.getElementById('movie_player');
+    const functionName = 'seekTo';
+    if (myDiv && myDiv[functionName] && typeof myDiv[functionName] === 'function') {
+      myDiv[functionName](time); // 함수 호출
+    } else {
+      console.error('Function not found or not a valid function');
+    }
+    onTimeChanged(time)
   }
 
   function onTimeChanged(time) {
@@ -316,10 +349,17 @@ function setup() {
         trackArtistsEls.push(alt)
     }
 
+    const myDiv = document.getElementById('movie_player');
+    const functionName = 'getCurrentTime';
+    let time
+    if (myDiv && myDiv[functionName] && typeof myDiv[functionName] === 'function') {
+      time = myDiv[functionName](); // 함수 호출
+    } else {
+      console.error('Function not found or not a valid function');
+    }
+    const video = document.querySelector('video');
     const song = trackNameEl.textContent,
-          artists = trackArtistsEls.map(x => x.textContent).filter(x => x.length > 0),
-          timeMatch = /^\s*(\d+):(\d+)/.exec(progressEl.textContent),
-          time = +timeMatch[1] * 60 + +timeMatch[2]
+          artists = trackArtistsEls.map(x => x.textContent).filter(x => x.length > 0);
 
     if (song !== currentSong || artists.length !== currentArtists.length || artists.some((a, i) => currentArtists[i] !== a)) {
       if (song.length === 0 || artists.length === 0) {
