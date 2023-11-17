@@ -65,7 +65,7 @@ style.innerHTML = `
     display: none;
   }
   .lyrics-wrapper.fullscreen .lyrics-container {
-    font-size: min(2.8em, 4vmin);
+    font-size: min(2.8em, 3vmin);
     background: radial-gradient(circle, rgba(0,0,0,0.3981967787114846) 50%, rgba(0,0,0,0) 100%);
   backdrop-filter: blur(50px);
     width: 100%;
@@ -88,17 +88,16 @@ style.innerHTML = `
     opacity: .4;
   }
 @keyframes fadeIn {
-    100% {opacity: 1;}
-    100% {opacity: 1;}
+    100% {opacity: 1.5;}
 }
 
 ul.lyrics-list li.active {
     animation-name: fadeIn;
     animation-fill-mode: forwards;
-    animation-duration: 2.0s;
+    animation-duration: 2.1s;
     font-size: 1.0em;
-    font-weight: bold;
     margin: 0em;
+    text-shadow: 2px 2px 4px rgba(0.9, 0.9, 0.9, 0.9);
 }
   .lyrics-delay {
     position: absolute;
