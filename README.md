@@ -1,9 +1,12 @@
 # ytm-lyrics
 GreaseMonkey / ViolentMonkey script to display lyrics on the YouTube Music Web Player using Musixmatch.
-
+(Tested with Chrome)
+Microsoft don't work
 ## Installation
 Create a new script in GreaseMonkey / ViolentMonkey, and copy-paste the content of the `index.js` file
 into it.
+
+![YouTube Music - Google Chrome 06 03 2024 16_25_51](https://github.com/ProComGameS/ytm-lyrics-v2/assets/147753434/e7f3cad7-04f8-4a4f-8875-f2befc5d6fc1)
 
 ## Usage
 A new icon will be added next to the "Volume" icon at the bottom-right of the screen. Simply
