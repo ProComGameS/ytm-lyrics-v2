@@ -29,75 +29,41 @@ if (GM_setValue === undefined)
 const style = document.createElement('style')
 
 style.innerHTML = `
-  .lyrics-wrapper {
-    display: flex;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 100;
-    align-items: flex-end;
-    justify-content: right;
-    padding-bottom: 2em;
-    pointer-events: none;
-    bottom: var(--ytmusic-player-bar-height);
-  }
-  .lyrics-wrapper.fullscreen {
-    bottom: 0;
-    padding-bottom: 0;
-  }
-  .lyrics-wrapper.hidden {
-    display: none;
-  }
-.lyrics-container {
-    scroll-behavior: smooth;
-    background: radial-gradient(circle, rgba(0,0,0,0.3981967787114846) 50%, rgba(0,0,0,0) 100%);
-    backdrop-filter: blur(50px);
-    height: 600px;
-    width: 400px;
-    overflow: scroll;
-    color: white;
-    box-shadow: 0 4px 12px 4px rgba(0,0,0,.5);
-    border-radius: 15px;
-    pointer-events: auto;
-    backdrop-filter: blur(100%);
+  ytmusic-description-shelf-renderer.style-scope.ytmusic-section-list-renderer.fullbleed {
+    display: none !important;
 }
-  .lyrics-container::-webkit-scrollbar {
-    display: none;
-  }
-  .lyrics-wrapper.fullscreen .lyrics-container {
-    font-size: min(2.8em, 3vmin);
-    background: radial-gradient(circle, rgba(0,0,0,0.3981967787114846) 50%, rgba(0,0,0,0) 100%);
-  backdrop-filter: blur(50px);
-    width: 100%;
-    height: 93%;
-    margin-bottom: 4.3%;
-  }
   ul.lyrics-list {
-    text-align: center;
-    font-size: 2.5em;
-    line-height: 2.5;
-    padding: 1em;
+    text-align: left;
+    font-size: 2.15em;
+    line-height: 1.7;
+    padding-left: 3.5em;
+    padding: 0.1em;
     position: relative;
-    font-family: 'YT Sans', sans-serif;
+    font-family: 'YouTube Sans', sans-serif;
   }
   ul.lyrics-list li {
-    opacity: .3;
+    animation-name: fadeOut;
+    animation-fill-mode: both;
+    animation-duration: 0.3s;
     list-style-type: none;
   }
   ul.lyrics-list li.other {
     opacity: .4;
   }
 @keyframes fadeIn {
-    100% {opacity: 1.5;}
+    100% {opacity: 1.5; font-size: 1.04em;}
+}
+@keyframes fadeOut {
+    0% {opacity: 1.5; font-size: 1.04em;}
+    100% {opacity: 0.3; font-size: 1em;}
 }
 
-ul.lyrics-list li.active {
+  ul.lyrics-list li.active {
     animation-name: fadeIn;
-    animation-fill-mode: forwards;
-    animation-duration: 2.1s;
-    font-size: 1.0em;
+    animation-fill-mode: both;
+    animation-duration: 0.3s;
     margin: 0em;
-    text-shadow: 2px 2px 4px rgba(0.9, 0.9, 0.9, 0.9);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
 }
   .lyrics-delay {
     position: absolute;
@@ -192,6 +158,7 @@ function setup() {
   // Set up out own elements
   const containerEl = document.body,
         controlsEl  = document.querySelector('.right-controls-buttons.ytmusic-player-bar')
+  const origLyricsEl = document.querySelector('#side-panel ytmusic-tab-renderer').querySelector("ytmusic-section-list-renderer")
 
   const controlEl = html`
     <tp-yt-paper-icon-button class="toggle-lyrics style-scope ytmusic-player-bar" icon="yt-icons:subtitles" title="Toggle lyrics" aria-label="Toggle lyrics" role="button">`
@@ -202,22 +169,11 @@ function setup() {
         <p class="lyrics-delay"></p>
         <ul class="lyrics-list">`
 
-  controlsEl.insertBefore(controlEl, controlsEl.childNodes[2])
-  containerEl.insertBefore(wrapperEl, containerEl.firstElementChild)
+  origLyricsEl.insertBefore(wrapperEl, origLyricsEl.firstElementChild)
 
-  wrapperEl.addEventListener('dblclick', () => {
-    wrapperEl.classList.toggle('fullscreen')
-    centerElementInContainer(wrapperEl.querySelector('.active'), wrapperEl.firstElementChild)
 
-    document.getSelection().removeAllRanges()
-  })
-
-  wrapperEl.firstElementChild.addEventListener('fullscreenchange', () => {
-    centerElementInContainer(wrapperEl.querySelector('.active'), wrapperEl.firstElementChild)
-  })
-
-  const lyricsEl = wrapperEl.querySelector('ul.lyrics-list'),
-        delayEl = wrapperEl.querySelector('p.lyrics-delay')
+  const lyricsEl = origLyricsEl.querySelector('ul.lyrics-list'),
+        delayEl = origLyricsEl.querySelector('p.lyrics-delay')
 
   controlEl.addEventListener('click', () => {
     wrapperEl.classList.toggle('hidden')
@@ -259,10 +215,12 @@ function setup() {
         GM_setValue(cacheKey, JSON.stringify(lyrics = await fetchLyrics(track, artists)))
       else
         lyrics = JSON.parse(cached)
-
+      for (let i = 0; i < 8; i++) {
+        lyricsEl.appendChild(document.createElement('br'))
+      }
       for (const lyric of lyrics) {
         const el = document.createElement('li'),
-              text = lyric.text || (lyric === lyrics[lyrics.length - 1] ? '(end)' : '...')
+              text = lyric.text || (lyric === lyrics[lyrics.length - 1] ? '' : '♪')
 
         if (text === '')
           el.classList.add('other')
@@ -284,8 +242,11 @@ function setup() {
 
         lyric.element = el
         lyricsEl.appendChild(el)
-      }
 
+      }
+      for (let i = 0; i < 8; i++) {
+        lyricsEl.appendChild(document.createElement('br'))
+      }
       lyrics.reverse()
       onTimeChanged(time)
     } catch (err) {
@@ -319,6 +280,11 @@ function setup() {
 
       if (autoScroll) {
         centerElementInContainer(activeLyric.element, wrapperEl.firstElementChild)
+        activeLyric.element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center'
+        });
       }
     } else {
       wrapperEl.firstElementChild.scrollTo(0, 0)
@@ -415,11 +381,9 @@ function setup() {
   })
 }
 
-
 let checkInterval = setInterval(() => {
-  if (document.querySelector('.content-info-wrapper .subtitle span') === null)
+  if (document.querySelector('#side-panel ytmusic-tab-renderer').querySelector("ytmusic-section-list-renderer") !== null && document.querySelector('#side-panel ytmusic-tab-renderer').querySelector("ytmusic-section-list-renderer").querySelector('ul.lyrics-list') === null)
+    clearInterval(checkInterval)
+    setup()
     return
-
-  clearInterval(checkInterval)
-  setup()
 }, 100)
