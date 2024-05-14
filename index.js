@@ -29,9 +29,6 @@ if (GM_setValue === undefined)
 const style = document.createElement('style')
 
 style.innerHTML = `
-  ytmusic-description-shelf-renderer.style-scope.ytmusic-section-list-renderer.fullbleed {
-    display: none !important;
-  }
   ytmusic-section-list-renderer.ytmusic-tab-renderer {
     display: block !important;
     width: 100%;
