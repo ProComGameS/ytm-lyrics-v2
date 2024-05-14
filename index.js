@@ -29,9 +29,8 @@ if (GM_setValue === undefined)
 const style = document.createElement('style')
 
 style.innerHTML = `
-  ytmusic-section-list-renderer.ytmusic-tab-renderer {
-    display: block !important;
-    width: 100%;
+  ytmusic-description-shelf-renderer.style-scope.ytmusic-section-list-renderer.fullbleed {
+    display: none !important;
   }
   ul.lyrics-list {
     text-align: left;
