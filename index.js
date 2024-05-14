@@ -31,12 +31,16 @@ const style = document.createElement('style')
 style.innerHTML = `
   ytmusic-description-shelf-renderer.style-scope.ytmusic-section-list-renderer.fullbleed {
     display: none !important;
-}
+  }
+  ytmusic-section-list-renderer.ytmusic-tab-renderer {
+    display: block !important;
+    width: 100%;
+  }
   ul.lyrics-list {
     text-align: left;
     font-size: 2.15em;
-    line-height: 1.7;
-    padding-left: 3.5em;
+    line-height: 1.5;
+    padding-left: 2em !important;
     padding: 0.1em;
     position: relative;
     font-family: 'YouTube Sans', sans-serif;
@@ -55,7 +59,7 @@ style.innerHTML = `
 }
 @keyframes fadeOut {
     0% {opacity: 1.5; font-size: 1.04em;}
-    100% {opacity: 0.3; font-size: 1em;}
+    100% {opacity: 0.2; font-size: 1em;}
 }
 
   ul.lyrics-list li.active {
@@ -66,8 +70,9 @@ style.innerHTML = `
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
 }
   .lyrics-delay {
+    font-size: 1.5em;
     position: absolute;
-    margin: 1em;
+    margin: 2em;
     pointer-events: none;
   }
 `
@@ -215,12 +220,14 @@ function setup() {
         GM_setValue(cacheKey, JSON.stringify(lyrics = await fetchLyrics(track, artists)))
       else
         lyrics = JSON.parse(cached)
+
       for (let i = 0; i < 8; i++) {
         lyricsEl.appendChild(document.createElement('br'))
       }
+
       for (const lyric of lyrics) {
         const el = document.createElement('li'),
-              text = lyric.text || (lyric === lyrics[lyrics.length - 1] ? '' : '♪')
+              text = lyric.text || (lyric === lyrics[lyrics.length - 1] ? '♪' : '♪')
 
         if (text === '')
           el.classList.add('other')
@@ -244,9 +251,11 @@ function setup() {
         lyricsEl.appendChild(el)
 
       }
+
       for (let i = 0; i < 8; i++) {
         lyricsEl.appendChild(document.createElement('br'))
       }
+
       lyrics.reverse()
       onTimeChanged(time)
     } catch (err) {
