@@ -21,6 +21,11 @@ if (GM_getValue === undefined)
 if (GM_setValue === undefined)
   GM_setValue = GM.setValue
 
+if (window.trustedTypes && window.trustedTypes.createPolicy) {
+  window.trustedTypes.createPolicy('default', {
+    createHTML: (string, sink) => string
+  });
+}
 
 //////////////////////////////////////////////////////////////
 /////  STYLE  ////////////////////////////////////////////////
