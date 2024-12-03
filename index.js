@@ -31,71 +31,79 @@ if (window.trustedTypes && window.trustedTypes.createPolicy) {
 /////  STYLE  ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
-const style = document.createElement('style')
+const style = document.createElement('style');
 
-style.innerHTML = `
+style.textContent = `
   .lyrics-wrapper {
+    display: -ms-flexbox;
+    display: -webkit-flex;
     display: flex;
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: 100;
     align-items: flex-end;
-    justify-content: right;
+    -ms-align-items: flex-end;
+    -webkit-align-items: flex-end;
+    justify-content: flex-end;
+    -ms-flex-pack: end;
+    -webkit-justify-content: flex-end;
     padding-bottom: 2em;
     pointer-events: none;
     bottom: var(--ytmusic-player-bar-height);
-  }
-  .lyrics-wrapper.fullscreen {
+}
+.lyrics-wrapper.fullscreen {
     bottom: 0;
     padding-bottom: 0;
-  }
-  .lyrics-wrapper.hidden {
+}
+.lyrics-wrapper.hidden {
     display: none;
-  }
+}
 .lyrics-container {
     scroll-behavior: smooth;
-    background: radial-gradient(circle, rgba(0,0,0,0.3981967787114846) 50%, rgba(0,0,0,0) 100%);
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.398) 50%, rgba(0, 0, 0, 0) 100%);
+    -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     height: 600px;
     width: 400px;
     overflow: scroll;
     color: white;
-    box-shadow: 0 4px 12px 4px rgba(0,0,0,.5);
+    box-shadow: 0 4px 12px 4px rgba(0, 0, 0, 0.5);
     border-radius: 15px;
     pointer-events: auto;
+    -webkit-backdrop-filter: blur(100%);
     backdrop-filter: blur(100%);
 }
-  .lyrics-container::-webkit-scrollbar {
+.lyrics-container::-webkit-scrollbar {
     display: none;
-  }
-  .lyrics-wrapper.fullscreen .lyrics-container {
+}
+.lyrics-wrapper.fullscreen .lyrics-container {
     font-size: min(2.8em, 3vmin);
-    background: radial-gradient(circle, rgba(0,0,0,0.3981967787114846) 50%, rgba(0,0,0,0) 100%);
-  backdrop-filter: blur(50px);
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.398) 50%, rgba(0, 0, 0, 0) 100%);
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
     width: 100%;
     height: 93%;
     margin-bottom: 4.3%;
-  }
-  ul.lyrics-list {
+}
+ul.lyrics-list {
     text-align: center;
     font-size: 2.5em;
     line-height: 2.5;
     padding: 1em;
     position: relative;
     font-family: 'YT Sans', sans-serif;
-  }
-  ul.lyrics-list li {
-    opacity: .3;
-    list-style-type: none;
-  }
-  ul.lyrics-list li.other {
-    opacity: .4;
-  }
-@keyframes fadeIn {
-    100% {opacity: 1.5;}
 }
-
+ul.lyrics-list li {
+    opacity: 0.3;
+    list-style-type: none;
+}
+ul.lyrics-list li.other {
+    opacity: 0.4;
+}
+@keyframes fadeIn {
+    100% { opacity: 1; }
+}
 ul.lyrics-list li.active {
     animation-name: fadeIn;
     animation-fill-mode: forwards;
@@ -104,14 +112,15 @@ ul.lyrics-list li.active {
     margin: 0em;
     text-shadow: 2px 2px 4px rgba(0.9, 0.9, 0.9, 0.9);
 }
-  .lyrics-delay {
+.lyrics-delay {
     position: absolute;
     margin: 1em;
     pointer-events: none;
-  }
+}
+
 `
 
-document.body.appendChild(style)
+document.head.appendChild(style);
 
 
 //////////////////////////////////////////////////////////////
