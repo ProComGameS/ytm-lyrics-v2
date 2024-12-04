@@ -21,59 +21,41 @@ if (GM_getValue === undefined)
 if (GM_setValue === undefined)
   GM_setValue = GM.setValue
 
+if (window.trustedTypes && window.trustedTypes.createPolicy) {
+  window.trustedTypes.createPolicy('default', {
+    createHTML: (string, sink) => string
+  });
+}
 
 //////////////////////////////////////////////////////////////
 /////  STYLE  ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
-const style = document.createElement('style')
+const style = document.createElement('style');
 
-style.innerHTML = `
-  ytmusic-description-shelf-renderer.style-scope.ytmusic-section-list-renderer.fullbleed {
-    display: none !important;
-  }
-  ul.lyrics-list {
-    text-align: left;
-    font-size: 2.15em;
-    line-height: 1.5;
-    padding-left: 2em !important;
-    padding: 0.1em;
-    position: relative;
-    font-family: 'YouTube Sans', sans-serif;
-  }
-  ul.lyrics-list li {
-    animation-name: fadeOut;
-    animation-fill-mode: both;
-    animation-duration: 0.3s;
+
     list-style-type: none;
-  }
-  ul.lyrics-list li.other {
-    opacity: .4;
-  }
+}
+ul.lyrics-list li.other {
+    opacity: 0.4;
+}
 @keyframes fadeIn {
-    100% {opacity: 1.5; font-size: 1.04em;}
-}
-@keyframes fadeOut {
-    0% {opacity: 1.5; font-size: 1.04em;}
-    100% {opacity: 0.2; font-size: 1em;}
-}
 
-  ul.lyrics-list li.active {
     animation-name: fadeIn;
     animation-fill-mode: both;
     animation-duration: 0.3s;
     margin: 0em;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
 }
-  .lyrics-delay {
-    font-size: 1.5em;
+
     position: absolute;
     margin: 2em;
     pointer-events: none;
-  }
+}
+
 `
 
-document.body.appendChild(style)
+document.head.appendChild(style);
 
 
 //////////////////////////////////////////////////////////////
