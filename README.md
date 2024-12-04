@@ -1,21 +1,31 @@
 # ytm-lyrics
-GreaseMonkey / ViolentMonkey script to display lyrics on the YouTube Music Web Player using Musixmatch.
+GreaseMonkey / ViolentMonkey script to display lyrics on the YouTube Music Web Player using Musixmatch. Available originalui and nativeui versions.
 
-## Installation
-Create a new script in GreaseMonkey / ViolentMonkey, and copy-paste the content of the `index.js` file
-into it.
+## OriginalUI 🎵
+Enhance your YouTube Music experience with a new icon next to the web player, which activates if synced lyrics are available for the current track.
 
-## Usage
-A new icon will be added next to the "Volume" icon at the bottom-right of the screen. Simply
-click it to open or close the lyrics panel, whose content will be automatically filled with lyrics,
-and scrolled as the song advances.  
-You can also double-click on the lyrics panel to display lyrics in fullscreen.
+Features:
+- ✨ Beautiful animations
+- 🧼 Clear design
+- 📺 Fullscreen mode (double tap)
+- ⏪ Rewind a song by tapping on a lyrics line
 
-If an error is encountered (track is instrumental or could not be found), the panel will be hidden
-and the icon will be greyed-out; simply hover over it with your mouse to see the reason why
-the lyrics could not be found.
+![image](https://github.com/user-attachments/assets/a6b0a2ea-24cb-4212-8768-2f08225322f5)
+![image](https://github.com/user-attachments/assets/0ae39035-d0d2-4ddb-8f08-8bde145337ab)
+![ytmusicoriginal](https://github.com/user-attachments/assets/3c185db7-a8ac-4b18-bf6f-dad32276ccb5)
 
-If the lyrics are no perfectly synced to the song:
-- Press `X` to delay the song by 100ms (the lyrics will appear **earlier**).
-- Press `Shift+X` to delay the lyrics by 100ms (the lyrics will appear **later**).
-- Press `Alt+X` to reset the delay to 0.
+[Download](https://github.com/ProComGameS/ytm-lyrics-v2/tree/ProComGameS-YTMLyrics-V2)
+
+
+## NativeUI 🎶
+Enjoy synced lyrics when available and standard lyrics when possible, all within the existing interface. This means no new buttons or changes—just a seamless experience in the lyrics tab.
+
+Features:
+- ✨ Beautiful animations
+- 🧼 Clear design
+- ⏪ Rewind a song by tapping on a lyrics line
+
+![image](https://github.com/user-attachments/assets/9963acc3-7393-4ef6-b0b6-eb3f98f73c9f)
+![ytmusicnative](https://github.com/user-attachments/assets/76aa3180-a6cd-4f68-a827-2352af4d9ba6)
+
+[Download](https://github.com/ProComGameS/ytm-lyrics-v2/tree/ProComGameS-YTMLyrics-NativeUI)
